@@ -27,6 +27,7 @@ interface MMStrategy {
     function getSuppliedView() external view returns (uint256);
     function requiredPaidDebt(uint256 _redeemCollateralAmt) external view returns (uint256);
     function balanceOfPool() external view returns (uint256);
+    function setDelayBlockRequired(uint256 _delayBlockRequired) external;
 }
 
 interface MMFarmingPool {
