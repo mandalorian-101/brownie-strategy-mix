@@ -221,7 +221,16 @@ contract Strategy is BaseStrategy {
         }
         _profit = _profit.add(_disposeOfMM());
 		
-        return (_profit, 0, _debtPayment);
+        // zero-out _profit & _loss
+        if (_profit > _loss){
+            _profit = _profit.sub(_loss);
+            _loss = 0;
+        } else{
+            _loss = _loss.sub(_profit);
+            _profit = 0;
+        }
+		
+        return (_profit, _loss, _debtPayment);
     }
 
     /**
