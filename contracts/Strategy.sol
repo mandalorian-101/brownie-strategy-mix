@@ -288,7 +288,12 @@ contract Strategy is BaseStrategy {
             MMFarmingPool(mmFarmingPool).withdraw(mmFarmingPoolId, _mToken);
             MMVault(mmVault).withdraw(IERC20(mmVault).balanceOf(address(this)));
             _liquidatedAmount = IERC20(want).balanceOf(address(this));
-            return (_liquidatedAmount, _liquidatedAmount < vault.strategies(address(this)).totalDebt? vault.strategies(address(this)).totalDebt.sub(_liquidatedAmount) : 0);		  
+            uint256 ttDebt = vault.strategies(address(this)).totalDebt;
+            uint256 _liquidateAllLoss = 0;
+            if (_liquidatedAmount < ttDebt){
+               _liquidateAllLoss = ttDebt.sub(_liquidatedAmount);
+            }
+            return (_liquidatedAmount, _liquidateAllLoss);		  
         } else{ 	
             uint256 _before = IERC20(want).balanceOf(address(this));
             if (_before < _amountNeeded){            
